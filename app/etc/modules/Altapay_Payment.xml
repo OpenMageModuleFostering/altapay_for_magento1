@@ -23,5 +23,12 @@
             <active>true</active>
             <codePool>community</codePool>
         </Altapay_Payment>
+        <Altapay_PaymentExtraGateways>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Altapay_Payment />
+            </depends>
+        </Altapay_PaymentExtraGateways>
     </modules>
 </config>

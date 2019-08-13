@@ -166,9 +166,9 @@ class Altapay_Payment_Model_Altapay {
 	 * 
 	 * @return AltapayReleaseResponse
 	 */
-	public function releaseReservation($paymentId, $amount)
+	public function releaseReservation($paymentId)
 	{
-		return $this->getAltapayMerchantAPI()->releaseReservation($paymentId, $amount);
+		return $this->getAltapayMerchantAPI()->releaseReservation($paymentId);
 	}
 	
 

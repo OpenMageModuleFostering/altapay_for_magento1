@@ -121,6 +121,9 @@ class Altapay_Payment_OnepageController extends Mage_Checkout_OnepageController 
 
 		$order = $this->_loadOrder($orderId);
 
+
+
+
 		$status = $this->getRequest()->getParam('status');
 		if(!is_null($order))
 		{
@@ -162,12 +165,6 @@ class Altapay_Payment_OnepageController extends Mage_Checkout_OnepageController 
 				{
 					// The notification is a payment-notification
 					$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, 'The payment is no longer "open" at Altapay, we can start processing the order', false);
-
-					if ($this->getRequest()->getParam('payment_status') == 'bank_payment_finalized')
-					{
-						$this->saveNotificationTransactionForEPayments($order, $reservationResponse); // Only for ePayments
-					}
-
 				}
 				else
 				{
@@ -211,7 +208,6 @@ class Altapay_Payment_OnepageController extends Mage_Checkout_OnepageController 
 			print("An unknown notification was sent: ".$status);
 			throw new Exception("An unknown notification was sent: ".$status);
 		}
-
 	}
 
 	/**
@@ -520,23 +516,4 @@ class Altapay_Payment_OnepageController extends Mage_Checkout_OnepageController 
         }
         $this->_redirect('altapaypayment/onepage/failure?orderID=' . $reservationResponse->getPrimaryPayment()->getShopOrderId());
     }
-
-	/**
-	 * @param $order
-	 * @param $reservationResponse
-	 * @throws Exception
-	 */
-	private function saveNotificationTransactionForEPayments($order, $reservationResponse)
-	{
-		/* @var $payment Mage_Sales_Model_Order_Payment */
-		$payment = $order->getPayment();
-
-		$authTrans = $payment->getAuthorizationTransaction();
-
-		// Updates the existing authorization transaction. This will allow the capture of the payment.
-		$authTrans->setAdditionalInformation(Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, $this->getRequest()->getParams());
-		$authTrans->setAdditionalInformation('altapay_response', serialize($reservationResponse));
-
-		$authTrans->save();
-	}
 }

@@ -265,8 +265,12 @@ abstract class Altapay_Payment_Model_Method_Abstract extends Mage_Payment_Model_
 
 
 	/**
+	 * Void is in regards to the payment on the order invoice - to void the authorization, for instance - so that the
+	 * funds aren't subsequently captured. Payments have to be refunded after capture and cannot be voided.
+	 *
 	 * (non-PHPdoc)
 	 * @see code/core/Mage/Payment/Model/Method/Mage_Payment_Model_Method_Abstract#void()
+	 * @see http://magento.stackexchange.com/questions/7271/whats-the-difference-between-voiding-and-canceling-an-order
 	 */
 	public function void(Varien_Object $payment)
 	{
@@ -274,6 +278,7 @@ abstract class Altapay_Payment_Model_Method_Abstract extends Mage_Payment_Model_
 		$transaction_id = $authTrans->getTxnId();
 
 		$response = $this->getAltapayModel($payment)->releaseReservation($transaction_id);
+
 		$payment->setTransactionAdditionalInfo('altapay_response', serialize($response));
 
 		$payment->setIsTransactionClosed(false);

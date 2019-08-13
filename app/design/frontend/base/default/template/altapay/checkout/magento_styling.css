@@ -1,5 +1,13 @@
 @CHARSET "UTF-8";
 
+input#creditCardNumberInput {
+	width: 200px;
+}
+
+input#cvcInput {
+	width: 50px;
+}
+
 div.AltapayMultiformContainer {
 	position: relative;
 }

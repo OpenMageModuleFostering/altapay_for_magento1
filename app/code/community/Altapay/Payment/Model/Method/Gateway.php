@@ -34,7 +34,7 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 		}
 		return parent::authorize($payment, $amount);
 	}
-	
+
 	public function getCheckoutRedirectUrl()
 	{
 		$onePage = $this->getOnepage();
@@ -43,7 +43,7 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 			$onePage->getQuote()->reserveOrderId();
 			$onePage->getQuote()->save();
 		}
-		
+
 		$terminal       = $this->getAltapayTerminal();
 		$orderid	    = $onePage->getQuote()->getReservedOrderId(); //'qoute_'.$onePage->getQuote()->getId();
 		$totals         = $onePage->getQuote()->getTotals(); /** @var $totals Mage_Sales_Model_Quote_Address_Total[] */
@@ -54,21 +54,21 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 		$shippingAddress = $onePage->getQuote()->getShippingAddress();
 
 		$customerInfo = array(
-		    'billing_postal'=> $billingAddress->getData('postcode'),
-		    'billing_country'=> $billingAddress->getData('country_id'),
-		    'billing_address'=> $billingAddress->getData('street'),
-		    'billing_city'=>$billingAddress->getData('city'),
-		    'billing_region'=>$this->getStateCode($billingAddress->getData('region')),
+			'billing_postal'=> $billingAddress->getData('postcode'),
+			'billing_country'=> $billingAddress->getData('country_id'),
+			'billing_address'=> $billingAddress->getData('street'),
+			'billing_city'=>$billingAddress->getData('city'),
+			'billing_region'=>$this->getStateCode($billingAddress->getData('region')),
 			'billing_firstname'=> $billingAddress->getData('firstname'),
-		    'billing_lastname'=> $billingAddress->getData('lastname'),
-		    'email'=>$billingAddress->getData('email'),
-		    'shipping_postal'=> $shippingAddress->getData('postcode'),
-		    'shipping_country'=> $shippingAddress->getData('country_id'),
-		    'shipping_address'=> $shippingAddress->getData('street'),
-		    'shipping_city'=>$shippingAddress->getData('city'),
-		    'shipping_region'=>$this->getStateCode($billingAddress->getData('region')),
+			'billing_lastname'=> $billingAddress->getData('lastname'),
+			'email'=>$billingAddress->getData('email'),
+			'shipping_postal'=> $shippingAddress->getData('postcode'),
+			'shipping_country'=> $shippingAddress->getData('country_id'),
+			'shipping_address'=> $shippingAddress->getData('street'),
+			'shipping_city'=>$shippingAddress->getData('city'),
+			'shipping_region'=>$this->getStateCode($shippingAddress->getData('region')),
 			'shipping_firstname'=> $shippingAddress->getData('firstname'),
-		    'shipping_lastname'=> $shippingAddress->getData('lastname'),
+			'shipping_lastname'=> $shippingAddress->getData('lastname'),
 			'customer_phone'=> $billingAddress->getData('telephone'),
 		);
 
@@ -77,18 +77,18 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 		 * flow where payment and capture is performed in two steps.
 		 */
 		//$paymentType = Altapay_Payment_Model_Constants::ACTION_AUTHORIZE;
-		
+
 		$paymentType = $this->getAltapayPaymentType(Altapay_Payment_Model_Constants::CONT_PATH_GATEWAY_ACTION_TYPE,$onePage->getQuote()->getStoreId());
 
 		$requestConfig = $this->getAltapayRequestConfig($orderid);
 		$transactionInfo = array(
-				'qoute'=>$onePage->getQuote()->getId(),
+			'qoute'=>$onePage->getQuote()->getId(),
 		);
 
 		$orderLines = $this->_createOrderLinesFromQuote($onePage->getQuote());
 
 		$response = $this->getAltapayModel()->createPaymentRequest(
-		 	$terminal,
+			$terminal,
 			$orderid,
 			$amount,
 			$currencyCode,
@@ -100,7 +100,7 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 			$transactionInfo,
 			$orderLines
 		);
-		
+
 		if($response->wasSuccessful())
 		{
 			Mage::getSingleton('core/session')->setData('altapay_payment_request_url', $response->getRedirectURL());
@@ -120,11 +120,17 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 		{
 			$data = $item->__toArray();
 
+			// We don't want the tax amount to contain a discount. The discount is informed in another field.
+			$discount_tax_compensation = 0;
+			if (isset($data['discount_tax_compensation'])) {
+				$discount_tax_compensation = $data['discount_tax_compensation'];
+			}
+
 			$orderLines[] = array(
 				'description'=>$data['name'],
 				'itemId'=>$data['sku'],
 				'quantity'=>$data['qty'],
-				'taxAmount'=>$data['tax_amount'],
+				'taxAmount'=>$data['tax_amount'] + $discount_tax_compensation,
 				'unitCode'=>'pcs', // TODO: Nice this up
 				'unitPrice'=>round($data['calculation_price'], 2, PHP_ROUND_HALF_DOWN),
 				'discount'=>round($data['discount_percent'], 2, PHP_ROUND_HALF_DOWN),
@@ -200,310 +206,315 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 	{
 		return Mage::getSingleton('checkout/type_onepage');
 	}
-	
+
 	protected function getAltapayRequestConfig($orderId)
 	{
 		return array(
-				  'callback_form' => Mage::getUrl('altapaypayment/onepage/form').'?orderID=' . $orderId
-				, 'callback_ok' => Mage::getUrl('altapaypayment/onepage/success').'?orderID=' . $orderId
-				, 'callback_fail' => Mage::getUrl('altapaypayment/onepage/failure').'?orderID=' . $orderId
-				, 'callback_redirect' => ''
-				, 'callback_open' => Mage::getUrl('altapaypayment/onepage/open').'?orderID=' . $orderId
-				, 'callback_notification' => Mage::getUrl('altapaypayment/onepage/notification').'?orderID=' . $orderId
+			'callback_form' => Mage::getUrl('altapaypayment/onepage/form').'?orderID=' . $orderId
+		, 'callback_ok' => Mage::getUrl('altapaypayment/onepage/success').'?orderID=' . $orderId
+		, 'callback_fail' => Mage::getUrl('altapaypayment/onepage/failure').'?orderID=' . $orderId
+		, 'callback_redirect' => ''
+		, 'callback_open' => Mage::getUrl('altapaypayment/onepage/open').'?orderID=' . $orderId
+		, 'callback_notification' => Mage::getUrl('altapaypayment/onepage/notification').'?orderID=' . $orderId
 		);
 	}
-	
+
 	protected function getAltapayTerminal()
 	{
 		return Mage::getStoreConfig(Altapay_Payment_Model_Constants::CONF_PATH_GATEWAY_TERMINAL);
 	}
 
 	private function getStateCode($state){ //only focusing on US and Mexico states.
+
 		$stateCode = "";
-		switch(trim(strtolower($state))){
+
+		$s = strtolower($state);
+		$s = str_replace(' ', '', $s);
+
+		switch($s) {
 			case "alabama":
 				$stateCode = "AL";
-			break;
+				break;
 			case "alaska":
 				$stateCode = "AK";
-			break;
+				break;
 			case "arizona":
 				$stateCode = "AZ";
-			break;
+				break;
 			case "arkansas":
 				$stateCode = "AR";
-			break;
+				break;
 			case "california":
-				$stateCode = "AR";
-			break;
+				$stateCode = "CA";
+				break;
 			case "colorado":
 				$stateCode = "CO";
-			break;
+				break;
 			case "connecticut":
 				$stateCode = "CT";
-			break;
+				break;
 			case "delaware":
 				$stateCode = "DE";
-			break;
+				break;
 			case "districtofcolumbia":
 				$stateCode = "DC";
-			break;
+				break;
 			case "florida":
 				$stateCode = "FL";
-			break;
+				break;
 			case "georgia":
 				$stateCode = "GA";
-			break;
+				break;
 			case "hawaii":
 				$stateCode = "HI";
-			break;
+				break;
 			case "idaho":
 				$stateCode = "ID";
-			break;
+				break;
 			case "illinois":
 				$stateCode = "IL";
-			break;
+				break;
 			case "indiana":
 				$stateCode = "IN";
-			break;
+				break;
 			case "iowa":
 				$stateCode = "IA";
-			break;
+				break;
 			case "kansas":
 				$stateCode = "KS";
-			break;
+				break;
 			case "kentucky":
 				$stateCode = "KY";
-			break;
+				break;
 			case "louisiana":
 				$stateCode = "LA";
-			break;
+				break;
 			case "maine":
 				$stateCode = "ME";
-			break;
+				break;
 			case "maryland":
 				$stateCode = "MD";
-			break;
+				break;
 			case "massachusetts":
 				$stateCode = "MA";
-			break;
+				break;
 			case "michigan":
 				$stateCode = "MI";
-			break;
+				break;
 			case "minnesota":
 				$stateCode = "MN";
-			break;
+				break;
 			case "mississippi":
 				$stateCode = "MS";
-			break;
+				break;
 			case "missouri":
 				$stateCode = "MO";
-			break;
+				break;
 			case "montana":
 				$stateCode = "MT";
-			break;
+				break;
 			case "nebraska":
 				$stateCode = "NE";
-			break;
+				break;
 			case "nevada":
 				$stateCode = "NV";
-			break;
+				break;
 			case "newhampshire":
 				$stateCode = "NH";
-			break;
+				break;
 			case "newjersey":
 				$stateCode = "NJ";
-			break;
+				break;
 			case "newmexico":
 				$stateCode = "NM";
-			break;
+				break;
 			case "newyork":
 				$stateCode = "NY";
-			break;
+				break;
 			case "northcarolina":
 				$stateCode = "NC";
-			break;
+				break;
 			case "northdakota":
 				$stateCode = "ND";
-			break;
+				break;
 			case "ohio":
 				$stateCode = "OH";
-			break;
+				break;
 			case "oklahoma":
 				$stateCode = "OK";
-			break;
+				break;
 			case "oregon":
 				$stateCode = "OR";
-			break;
+				break;
 			case "pennsylvania":
 				$stateCode = "PA";
-			break;
+				break;
 			case "puertorico":
 				$stateCode = "PR";
-			break;
+				break;
 			case "rhodeisland":
 				$stateCode = "RI";
-			break;
+				break;
 			case "southcarolina":
 				$stateCode = "SC";
-			break;
+				break;
 			case "southdakota":
 				$stateCode = "SD";
-			break;
+				break;
 			case "tennessee":
 				$stateCode = "TN";
-			break;
+				break;
 			case "texas":
 				$stateCode = "TX";
-			break;
+				break;
 			case "utah":
 				$stateCode = "UT";
-			break;
+				break;
 			case "vermont":
 				$stateCode = "VT";
-			break;
+				break;
 			case "virginia":
 				$stateCode = "VA";
-			break;
+				break;
 			case "washington":
 				$stateCode = "WA";
-			break;
+				break;
 			case "westvirginia":
 				$stateCode = "WV";
-			break;
+				break;
 			case "wisconsin":
 				$stateCode = "WI";
-			break;
+				break;
 			case "wyoming":
 				$stateCode = "WY";
-			break;
+				break;
 			case "armedforcesamericas":
 				$stateCode = "AA";
-			break;
+				break;
 			case "armedforceseurope":
 				$stateCode = "AE";
-			break;
+				break;
 			case "asrmedforcespacific":
 				$stateCode = "AP";
-			break;
+				break;
 			case "americansamoa":
 				$stateCode = "AS";
-			break;
+				break;
 			case "federatedstatesofmicronesia":
 				$stateCode = "FM";
-			break;
+				break;
 			case "guam":
 				$stateCode = "GU";
-			break;
+				break;
 			case "marshallislands":
 				$stateCode = "MH";
-			break;
+				break;
 			case "northernmarianaislands":
 				$stateCode = "MP";
-			break;
+				break;
 			case "palau":
 				$stateCode = "PW";
-			break;
+				break;
 			case "virginislands":
 				$stateCode = "VI";
-			break;
+				break;
 			//==========================================================================================================
 			case "aguascalientes":
 				$stateCode = "AGS";
-			break;
+				break;
 			case "bajacalifornia":
 				$stateCode = "BC";
-			break;
+				break;
 			case "bajacaliforniasur":
 				$stateCode = "BCS";
-			break;
+				break;
 			case "campeche":
 				$stateCode = "CAMP";
-			break;
+				break;
 			case "chiapas":
 				$stateCode = "CHIS";
-			break;
+				break;
 			case "chihuahua":
 				$stateCode = "CHIH";
-			break;
+				break;
 			case "coahuila":
 				$stateCode = "COAH";
-			break;
+				break;
 			case "colima":
 				$stateCode = "COL";
-			break;
+				break;
 			case "distritofederal":
 				$stateCode = "DF";
-			break;
+				break;
 			case "durango":
 				$stateCode = "DGO";
-			break;
+				break;
 			case "estadodeméxico":
 				$stateCode = "MEX";
-			break;
+				break;
 			case "guanajuato":
 				$stateCode = "GTO";
-			break;
+				break;
 			case "guerrero":
 				$stateCode = "GRO";
-			break;
+				break;
 			case "hidalgo":
 				$stateCode = "HGO";
-			break;
+				break;
 			case "jalisco":
 				$stateCode = "JAL";
-			break;
+				break;
 			case "michoacán":
 				$stateCode = "MICH";
-			break;
+				break;
 			case "morelos":
 				$stateCode = "MOR";
-			break;
+				break;
 			case "nayarit":
 				$stateCode = "NAY";
-			break;
+				break;
 			case "nuevoleón":
 				$stateCode = "NL";
-			break;
+				break;
 			case "oaxaca":
 				$stateCode = "OAX";
-			break;
+				break;
 			case "puebla":
 				$stateCode = "PUE";
-			break;
+				break;
 			case "querétaro":
 				$stateCode = "QRO";
-			break;
+				break;
 			case "quintanaroo":
 				$stateCode = "Q ROO";
-			break;
+				break;
 			case "sanluispotosí":
 				$stateCode = "SLP";
-			break;
+				break;
 			case "sinaloa":
 				$stateCode = "SIN";
-			break;
+				break;
 			case "sonora":
 				$stateCode = "SON";
-			break;
+				break;
 			case "tabasco":
 				$stateCode = "TAB";
-			break;
+				break;
 			case "tamaulipas":
 				$stateCode = "TAMPS";
-			break;
+				break;
 			case "tlaxcala":
 				$stateCode = "TLAX";
-			break;
+				break;
 			case "veracruz":
 				$stateCode = "VER";
-			break;
+				break;
 			case "yucatán":
 				$stateCode = "YUC";
-			break;
+				break;
 			case "zacatecas":
 				$stateCode = "ZAC";
-			break;
+				break;
 			default:
 				$stateCode = $state;
 		}

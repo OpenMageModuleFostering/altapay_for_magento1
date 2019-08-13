@@ -55,7 +55,7 @@ abstract class Altapay_Payment_Model_Method_Abstract extends Mage_Payment_Model_
 			 * In order to refund them we need to set the transaction id, as we would
 			 * normally do later in the capture process.
 			 */
-			if ($paymentStatus == 'bank_payment_finalized')
+			if ($paymentStatus == 'bank_payment_finalized' || $paymentStatus == 'captured')
 			{
 				$payment->setIsTransactionClosed(false);
 				$payment->setTransactionId($session_authTransactionId);

@@ -78,7 +78,7 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 		 */
 		//$paymentType = Altapay_Payment_Model_Constants::ACTION_AUTHORIZE;
 		
-		$paymentType = $this->getAltapayPaymentType('altapay/altapay_gateway/payment_action',$onePage->getQuote()->getStoreId());
+		$paymentType = $this->getAltapayPaymentType(Altapay_Payment_Model_Constants::CONT_PATH_GATEWAY_ACTION_TYPE,$onePage->getQuote()->getStoreId());
 
 		$requestConfig = $this->getAltapayRequestConfig($orderid);
 		$transactionInfo = array(

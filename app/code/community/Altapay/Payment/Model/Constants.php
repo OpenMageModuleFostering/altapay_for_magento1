@@ -22,3 +22,4 @@ class Altapay_Payment_Model_Constants {
 	const ACTION_AUTHORIZE_CAPTURE = 'paymentAndCapture';
 	const ACTION_RECURRING         = 'recurring';
 }
+

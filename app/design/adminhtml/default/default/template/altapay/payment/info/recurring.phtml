@@ -1,0 +1,30 @@
+Altapay Payment Gateway (Stored Credit Card)<br />
+<?php
+if($_info = $this->getInfo())
+{
+	if(!is_null($_info->getAdditionalData()) && 
+			($paymentResponse = @unserialize($_info->getAdditionalData())) !== false)
+	{
+		//print('<pre>');
+		//print_r($paymentResponse);
+		if($paymentResponse !== false)
+		{
+			echo $this->__('Payment Nature: %s (%s)', $this->htmlEscape($paymentResponse->getPrimaryPayment()->getPaymentNature()), $this->htmlEscape($paymentResponse->getPrimaryPayment()->getPaymentNatureService()->getName())).'<br />';
+			if($paymentResponse->getPrimaryPayment()->getPaymentNature() == 'CreditCard')
+			{
+				echo $this->__('Credit Card Number: %s', $this->htmlEscape($paymentResponse->getPrimaryPayment()->getMaskedPan())).'<br />';
+				echo $this->__('Credit Card Status: %s', $this->htmlEscape($paymentResponse->getPrimaryPayment()->getCardStatus())).'<br />';
+			}
+		}
+	}
+	else
+	{
+		echo $this->__('Credit Card Number: %s', $this->htmlEscape($this->getInfo()->getData('cc_number_enc'))).'<br />';
+	}
+}
+else
+{
+	print("Payment Information Missing");
+}
+
+?>

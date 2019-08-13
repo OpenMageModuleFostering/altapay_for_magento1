@@ -1,0 +1,16 @@
+<?php if($this->showBlock()) : ?>
+	<?php if($this->customerChooseToSaveToken()) : ?>
+		<p>
+			<h3 class="sub-title"><?php echo $this->__('Your credit card is added to you account for easy use on your next order'); ?></h3>
+			<a class="button" href="<?php echo $this->getUrl('customer/token/view'); ?>">
+				<?php echo $this->__('Manage your credit cards here'); ?>
+			</a>
+		</p>
+	<?php else : ?>
+		<form id="altapay_save_token" action="<?php echo $this->getUrl('altapaypayment/token/save'); ?>">
+			<?php echo $this->getBlockHtml('formkey'); ?>
+			<input type="hidden" name="order_id" value="<?php echo $this->getOrderId(); ?>" />
+			<button type="submit" class="button"><span><span><?php echo $this->__('Save you creditcard for easy use'); ?></span></span></button>	
+		</form>
+	<?php endif; ?>
+<?php endif; ?>

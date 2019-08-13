@@ -1,0 +1,25 @@
+#my-tokens-table tr.deleting {
+	background-color: gray;
+	text-align: 	
+}
+
+#my-tokens-table tr.deleting {
+	display: none;
+}
+
+#my-tokens-table .token-status {
+	height: 25px;
+	width: 20px;
+	display: inline-block;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+#my-tokens-table .token-status.updating {
+	background-image: url('../images/ajax-loader.gif');
+}
+#my-tokens-table .token-status.updated {
+	background-image: url('../images/success.png');
+}
+#my-tokens-table .token-status.error {
+	background-image: url('../images/error.png');
+}

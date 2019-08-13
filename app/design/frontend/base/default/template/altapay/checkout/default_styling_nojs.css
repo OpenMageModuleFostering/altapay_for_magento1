@@ -1,0 +1,14 @@
+@CHARSET "UTF-8";
+
+div.AltapayMultiformContainer .FormTypeButton {
+	float:none;
+	position:relative;
+	margin-top: 10px;
+	background-color:#eeeeee;
+	z-index: 100;
+}
+
+div.AltapayMultiformContainer form {
+	position:relative ;
+	top:-1px;
+}

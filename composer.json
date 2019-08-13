@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/AltaPay_for_Magento1",
+    "type": "magento-module",
+    "license": "The-MIT-License-(MIT)",
+    "homepage": "",
+    "description": "Plugin that integrates Magento to the AltaPay payment gateway.",
+    "authors": [
+    {
+        "name": "AltaPay Integration Team",
+        "email": "integration@altapay.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

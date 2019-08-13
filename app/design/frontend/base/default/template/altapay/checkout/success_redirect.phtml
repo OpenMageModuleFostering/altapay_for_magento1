@@ -1,0 +1,18 @@
+<?php
+/**
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Altapay A/S (http://www.altapay.com)
+ */
+?>
+<div class="page-title">
+    <h1><?php echo $this->__('Payment Successful') ?></h1>
+</div>
+<h2 class="sub-title"><?php echo $this->__('Redirecting...') ?></h2>
+<p><?php echo Mage::helper('altapaypayment')->__('If you are not redirected to the order confirmation page please click the button below.') ?></p>
+
+<div class="buttons-set">
+    <button type="button" class="button" title="<?php echo Mage::helper('altapaypayment')->__('Order Confirmation') ?>" onclick="window.location='<?php echo $this->getCheckoutSuccessUrl() ?>'"><span><span><?php echo Mage::helper('altapaypayment')->__('Order Confirmation') ?></span></span></button>
+</div>
+
+<!meta http-equiv="refresh" content="0;url=<?php echo $this->getCheckoutSuccessUrl(); ?>"/>

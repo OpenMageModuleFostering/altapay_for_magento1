@@ -1,0 +1,369 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Altapay Payment Extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category   Altapay
+ * @package    Altapay_Payment
+ * @copyright  Copyright (c) 2011-2012 Altapay A/S (http://altapay.com)
+ * @author	   Emanuel Holm Greisen
+ * @license    Apache License, Version 2.0
+ */
+-->
+<config>
+       <sections>
+              <altapay translate="label" module="altapaypayment">
+                     <label>Altapay Payments</label>
+                     <class>altapay-section</class>
+                     <header_css>altapay-header</header_css>
+                     <tab>sales</tab>
+                     <frontend_type>text</frontend_type>
+                     <sort_order>360</sort_order>
+                     <show_in_default>1</show_in_default>
+                     <show_in_store>1</show_in_store>
+                     <groups>
+                            <overview translate="label">
+                                   <label>Overview</label>
+                                   <expanded>1</expanded>
+                                   <frontend_type>text</frontend_type>
+                                   <sort_order>1</sort_order>
+                                   <show_in_default>1</show_in_default>
+                                   <show_in_store>1</show_in_store>
+                                   <comment><![CDATA[
+                                         <div class="box">
+                                                 <p class="grand-total"><b>Altapay - One Contact. One Contract.</b></p>
+                                                 <p>Altapay is a full-line supplier of payment solutions supporting customers, merchants and financial institutions to
+                                                 safely process payment transactions. We are focused on handling customer payments securely and efficiently and on
+                                                 offering merchants deep, real-time insight into transaction information.</p>
+                                                 <p>Please select from our available methods below.<p>
+                                                 <p class="total"><b>PHP/Server Requirements:</b></p>
+                                                 <ul>
+                                                 	<li><code>allow_url_fopen</code> Must be set to true, this is required for our plug-in to communicate via our Payment Gateway</li>
+                                                 	<li>HTTPS stream-wrapper must be enabled.</li>
+                                                 	<li>If you run PHP as CGI under Apache, then apache must be compiled <u>without</u> "<code>--with-curlwrappers</code>". This ensures that Basic HTTP authentication works.</li> 
+                                                 </ul>
+                                         </div>
+                                         
+                                         ]]>
+                                   </comment>
+                            </overview>
+                            <altapay_general translate="label comment">
+                                   <label>API / Integration Settings</label>
+                                   <fieldset_css>altapay-config</fieldset_css>
+                                   <frontend_type>text</frontend_type>
+                                   <sort_order>4</sort_order>
+                                   <show_in_default>1</show_in_default>
+                                   <show_in_store>1</show_in_store>
+                                   <comment><![CDATA[
+                                         <div class="box">
+                                                 <p class="grand-total"><b>Note:</b></p>
+                                                 <p>Typically your installation for testing will be "https://testgateway.altapaysecure.com/" and for production it will be "https://yourdomain.altapaysecure.com/". Your Username and Password may be different for testing and live</p>
+                                         </div>]]>
+                                   </comment>
+                                   <fields>
+                                          <api_installation translate="label">
+                                                 <label>Installation</label>
+                                                 <config_path>altapay_general/api_installation</config_path>
+                                                 <sort_order>5</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </api_installation>
+                                          <api_username translate="label">
+                                                 <label>API Username</label>
+                                                 <config_path>altapay_general/api_username</config_path>
+                                                 <sort_order>5</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </api_username>
+                                          <api_password translate="label">
+                                                 <label>API Password</label>
+                                                 <config_path>altapay_general/api_password</config_path>
+                                                 <frontend_type>obscure</frontend_type>
+                                                 <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                                                 <sort_order>10</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </api_password>
+                                   </fields>
+                            </altapay_general>
+
+							<altapay_token translate="label">
+                                   <label>Altapay Payment Gateway With Tokenization - Allows your customers store at token of there creditcard.</label>
+                                   <fieldset_css>altapay-config</fieldset_css>
+                                   <frontend_type>text</frontend_type>
+                                   <sort_order>9</sort_order>
+                                   <show_in_default>1</show_in_default>
+                                   <show_in_store>1</show_in_store>
+                                   <comment><![CDATA[
+                                         <div class="box">
+                                                 <p class="grand-total"><b>Note:</b></p>
+                                                 <p>Before you can use the Gateway you must make sure that your Magento installation is visible to the outside as Altapay's Payment Gateway will be 
+                                                    performing callback calls with information about the payment.<p>
+                                         </div>]]>
+                                   </comment>
+                                   <fields>
+                                          <active translate="label">
+                                                 <label>Enable</label>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>adminhtml/system_config_source_yesno</source_model>
+                                                 <sort_order>0</sort_order>
+                                                 <config_path>payment/altapay_token/active</config_path>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </active>
+                                          
+                                          <active_customer_token_control translate="label">
+                                                 <label>Enable Customer Token Control</label>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>adminhtml/system_config_source_yesno</source_model>
+                                                 <sort_order>1</sort_order>
+                                                 <config_path>payment/altapay_token/active_customer_token_control</config_path>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </active_customer_token_control>
+                                          
+                                          <terminal translate="label">
+                                                 <label>Terminal</label>
+                                                 <comment>You need to set your username / password above before you can choose your Terminal.</comment>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>altapay_payment_model_source_terminals</source_model>
+                                                 <sort_order>10</sort_order>
+                                                 <config_path>payment/altapay_token/terminal</config_path>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </terminal>
+                                          <title translate="label comment">
+                                                 <label>Title</label>
+                                                 <config_path>payment/altapay_token/title</config_path>
+                                                 <frontend_type>text</frontend_type>
+                                                 <sort_order>20</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </title>
+                        
+                                          <payment_action translate="label">
+                                                 <label>Payment Action</label>
+                                                 <frontend_type>select</frontend_type>
+                                                 <config_path>payment/altapay_token/payment_action</config_path>
+                                                 <source_model>altapay_payment_model_source_paymentAction</source_model>
+                                                 <sort_order>30</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </payment_action>
+                                          
+                                          
+                                          
+                                          <sort_order translate="label">
+                                                 <label>Sort Order</label>
+                                                 <config_path>payment/altapay_token/sort_order</config_path>
+                                                 <frontend_type>text</frontend_type>
+                                                 <sort_order>100</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </sort_order>
+                                   </fields>
+                            </altapay_token>
+							
+                            <altapay_gateway translate="label">
+                                   <label>Altapay Payment Gateway - Allows your customers to purchase with any of the payment options you have enabled in your Altapay account.</label>
+                                   <fieldset_css>altapay-config</fieldset_css>
+                                   <frontend_type>text</frontend_type>
+                                   <sort_order>10</sort_order>
+                                   <show_in_default>1</show_in_default>
+                                   <show_in_store>1</show_in_store>
+                                   <comment><![CDATA[
+                                         <div class="box">
+                                                 <p class="grand-total"><b>Note:</b></p>
+                                                 <p>Before you can use the Gateway you must make sure that your Magento installation is visible to the outside as Altapay's Payment Gateway will be 
+                                                    performing callback calls with information about the payment.<p>
+                                         </div>]]>
+                                   </comment>
+                                   <fields>
+                                          <active translate="label">
+                                                 <label>Enable</label>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>adminhtml/system_config_source_yesno</source_model>
+                                                 <sort_order>0</sort_order>
+                                                 <config_path>payment/altapay_gateway/active</config_path>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </active>
+                                          <terminal translate="label">
+                                                 <label>Terminal</label>
+                                                 <comment>You need to set your username / password above before you can choose your Terminal.</comment>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>altapay_payment_model_source_terminals</source_model>
+                                                 <sort_order>1</sort_order>
+                                                 <config_path>payment/altapay_gateway/terminal</config_path>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </terminal>
+                                          <title translate="label comment">
+                                                 <label>Title</label>
+                                                 <config_path>payment/altapay_gateway/title</config_path>
+                                                 <frontend_type>text</frontend_type>
+                                                 <sort_order>2</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </title>
+                        
+                                          <payment_action translate="label">
+                                                 <label>Payment Action</label>
+                                                 <frontend_type>select</frontend_type>
+                                                 <config_path>payment/altapay_gateway/payment_action</config_path>
+                                                 <source_model>altapay_payment_model_source_paymentAction</source_model>
+                                                 <sort_order>3</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </payment_action>
+                                          <sort_order translate="label">
+                                                 <label>Sort Order</label>
+                                                 <config_path>payment/altapay_gateway/sort_order</config_path>
+                                                 <frontend_type>text</frontend_type>
+                                                 <sort_order>100</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </sort_order>
+                                   </fields>
+                            </altapay_gateway>
+
+                            <altapay_moto translate="label">
+                                   <label>Altapay MO/TO - Used to take payments on behalf of your customers here in the admin area.</label>
+                                   <fieldset_css>altapay-config</fieldset_css>
+                                   <frontend_type>text</frontend_type>
+                                   <sort_order>20</sort_order>
+                                   <show_in_default>1</show_in_default>
+                                   <show_in_store>1</show_in_store>
+                                   <fields>
+                                          <active translate="label comment">
+                                                 <label>Enable</label>
+                                                 <config_path>payment/altapay_moto/active</config_path>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>adminhtml/system_config_source_yesno</source_model>
+                                                 <sort_order>0</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </active>
+                                          <moto_terminal translate="label">
+                                                 <label>MO/TO Terminal</label>
+                                                 <comment>This terminal is only used when taking credit card payments in the back-office</comment>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>altapay_payment_model_source_terminals</source_model>
+                                                 <sort_order>1</sort_order>
+                                                 <config_path>payment/altapay_moto/terminal</config_path>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </moto_terminal>
+                                          <title translate="label comment">
+                                                 <label>Title</label>
+                                                 <config_path>payment/altapay_moto/title</config_path>
+                                                 <frontend_type>text</frontend_type>
+                                                 <sort_order>2</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </title>
+                                          <payment_action translate="label">
+                                                 <label>Payment Action</label>
+                                                 <frontend_type>select</frontend_type>
+                                                 <config_path>payment/altapay_moto/payment_action</config_path>
+                                                 <source_model>altapay_payment_model_source_paymentAction</source_model>
+                                                 <sort_order>3</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </payment_action>
+                                          <useccv translate="label">
+                                                 <label>Request Card Security Code</label>
+                                                 <config_path>payment/altapay_moto/useccv</config_path>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>adminhtml/system_config_source_yesno</source_model>
+                                                 <sort_order>10</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </useccv>
+                                          <sort_order translate="label">
+                                                 <label>Sort Order</label>
+                                                 <config_path>payment/altapay_moto/sort_order</config_path>
+                                                 <frontend_type>text</frontend_type>
+                                                 <sort_order>100</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </sort_order>
+                                   </fields>
+                            </altapay_moto>
+
+                            <altapay_recurring translate="label">
+                                   <label>Stored Credit Card - Allows your customers register their credit card for later use.</label>
+                                   <fieldset_css>altapay-config</fieldset_css>
+                                   <frontend_type>text</frontend_type>
+                                   <sort_order>30</sort_order>
+                                   <show_in_default>1</show_in_default>
+                                   <show_in_store>1</show_in_store>
+                                   <comment><![CDATA[
+                                         <div class="box">
+                                                 <p class="grand-total"><b>Note:</b></p>
+                                                 <p>Before you can use the Gateway you must make sure that your Magento installation is visible to the outside as Altapay's Payment Gateway will be 
+                                                    performing callback calls with information about the payment.<p>
+                                         </div>]]>
+                                   </comment>
+                                   <fields>
+                                          <active translate="label">
+                                                 <label>Enable</label>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>adminhtml/system_config_source_yesno</source_model>
+                                                 <sort_order>0</sort_order>
+                                                 <config_path>payment/altapay_recurring/active</config_path>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </active>
+                                          <terminal translate="label">
+                                                 <label>Terminal</label>
+                                                 <comment>You need to set your username / password above before you can choose your Terminal.</comment>
+                                                 <frontend_type>select</frontend_type>
+                                                 <source_model>altapay_payment_model_source_terminals</source_model>
+                                                 <sort_order>1</sort_order>
+                                                 <config_path>payment/altapay_recurring/terminal</config_path>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </terminal>
+                                          <title translate="label comment">
+                                                 <label>Title</label>
+                                                 <config_path>payment/altapay_recurring/title</config_path>
+                                                 <frontend_type>text</frontend_type>
+                                                 <sort_order>2</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </title>
+                                          <payment_action translate="label">
+                                                 <label>Payment Action</label>
+                                                 <frontend_type>select</frontend_type>
+                                                 <config_path>payment/altapay_recurring/payment_action</config_path>
+                                                 <source_model>altapay_payment_model_source_paymentAction</source_model>
+                                                 <sort_order>3</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </payment_action>
+                        
+                                          <sort_order translate="label">
+                                                 <label>Sort Order</label>
+                                                 <config_path>payment/altapay_recurring/sort_order</config_path>
+                                                 <frontend_type>text</frontend_type>
+                                                 <sort_order>10</sort_order>
+                                                 <show_in_default>1</show_in_default>
+                                                 <show_in_store>1</show_in_store>
+                                          </sort_order>
+                                   </fields>
+                            </altapay_recurring>
+
+                     </groups>
+              </altapay>
+       </sections>
+</config>

@@ -1,0 +1,15 @@
+<?php $_code=$this->getMethodCode() ?>
+<div class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+	<p><?php echo $this->__('You can supply your payment details securely after clicking Continue') ?></p>
+	<?php $customerTokens = Mage::getModel('altapaypayment/token')->getAllCustomerTokens(); ?>
+	<?php if($customerTokens && $customerTokens->getSize()) : ?>
+		<select name="ccToken">
+			<option value=""><?php echo $this->__('Please select a creditcard'); ?></option>
+			<?php foreach($customerTokens as $token) : ?>
+				<option value="<?php echo $token->getId(); ?>"<?php if($token->getPrimary()) : ?> selected="selected"<?php endif; ?>><?php echo ($token->getCustomName()) ? $token->getCustomName() : $token->getMaskedPan() ?></option>				
+			<?php endforeach; ?>
+		</select>
+	<?php else : ?>
+		<p><?php echo $this->__('When your order is confirmed, you will be presented with the option to save your creditcard for easy use on all following orders.') ?></p>
+	<?php endif; ?>
+</div>

@@ -1,0 +1,11 @@
+<?php $_code=$this->getMethodCode() ?>
+<div class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+<?php echo $this->__('If you choose to register a new card you will add it securely after clicking Continue') ?>
+<p>
+<select name="subscription_id">
+	<?php foreach($this->getSubscriptions() as $id => $value):?>
+		<option value="<?php echo $id;?>"><?php echo $value;?></option>
+	<?php endforeach;?>
+</select>
+</p>
+</div>

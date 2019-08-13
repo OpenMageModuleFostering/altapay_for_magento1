@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category   Altapay
+ * @package    Altapay_Payment
+ * @copyright  Copyright (c) 2011-2012 Altapay A/S (http://altapay.com)
+ * @author	   Emanuel Holm Greisen <eg@altapay.com>
+ * @license    Apache License, Version 2.0
+ */
+-->
+<layout version="0.1.0">
+
+	<!-- This one is used when Altapay calls back to show the payment page --> 
+	<altapaypayment_onepage_form>
+		<remove name="sale.reorder.sidebar" />
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/2columns-right.phtml</template>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="altapaypayment/onepage_form" name="checkout.form"
+				template="altapay/checkout/form.phtml" />
+		</reference>
+		<reference name="right">
+			<action method="unsetChildren"></action>
+			<block type="page/html_wrapper" name="checkout.progress.wrapper"
+				translate="label">
+				<label>Checkout Progress Wrapper</label>
+				<action method="setElementId">
+					<value>checkout-progress-wrapper</value>
+				</action>
+				<block type="checkout/onepage_progress" name="checkout.progress"
+					before="-" template="altapay/checkout/onepage/progress.phtml" />
+			</block>
+		</reference>
+	</altapaypayment_onepage_form>
+
+	<!-- This one is used when Altapay calls back to let us know that a payment has failed -->
+	<altapaypayment_onepage_failure>
+		<remove name="sale.reorder.sidebar" />
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/2columns-right.phtml</template>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="altapaypayment/onepage_failed" name="checkout.failed"
+				template="altapay/checkout/failed.phtml" />
+		</reference>
+		<reference name="right">
+			<action method="unsetChildren"></action>
+			<block type="page/html_wrapper" name="checkout.progress.wrapper"
+				translate="label">
+				<label>Checkout Progress Wrapper</label>
+				<action method="setElementId">
+					<value>checkout-progress-wrapper</value>
+				</action>
+				<block type="checkout/onepage_progress" name="checkout.progress"
+					before="-" template="altapay/checkout/onepage/progress.phtml" />
+			</block>
+		</reference>
+	</altapaypayment_onepage_failure>
+
+	<!-- This one is used when Altapay calls back to let us know that a payment has succeeded -->
+	<altapaypayment_onepage_success>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/1column.phtml</template>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="altapaypayment/onepage_success" name="checkout.success"
+				template="altapay/checkout/success_redirect.phtml" />
+		</reference>
+	</altapaypayment_onepage_success>
+	
+	<checkout_onepage_success>
+		<reference name="content">
+			<block type="altapaypayment/onepage_success_token" name="checkout.success.token" template="altapay/checkout/onepage/success/token.phtml" after="checkout.success" />
+		</reference>
+	</checkout_onepage_success>
+	
+	<customer_account>
+		<reference name="customer_account_navigation">
+			<action ifconfig="payment/altapay_token/active_customer_token_control" method="addLink" translate="label" module="altapaypayment"><name>altapay_token</name><path>customer/token/view</path><label>Credit Cards</label></action>
+		</reference>
+	</customer_account>
+	
+	<customer_token_view>
+        <update handle="customer_account" />
+        <reference name="head">
+			<action method="addItem"><type>skin_css</type><name>altapay/css/altapay.css</name><params/></action>
+			<action method="addItem"><type>skin_js</type><name>altapay/js/altapay.js</name><params/></action>
+        </reference>
+        <reference name="root">
+            <block type="core/messages" name="global_messages" as="global_messages"/>
+            <block type="core/messages" name="messages" as="messages"/>
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="altapaypayment/customer_account_token" name="altapay_token" template="altapay/customer/account/token/view.phtml"/>            
+        </reference>
+    </customer_token_view>
+	
+
+</layout>

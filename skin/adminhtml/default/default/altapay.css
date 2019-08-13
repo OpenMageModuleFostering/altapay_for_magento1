@@ -1,0 +1,43 @@
+/*--SIDE MENU--*/
+ul.tabs a.altapay-section,ul.tabs a.altapay-section:hover {
+	background:url(images/tabs_span_bg.gif) repeat-x scroll 0 100% transparent;
+	border-bottom:medium none;
+}
+
+ul.tabs a.altapay-section span,ul.tabs a.altapay-section:hover span {
+	background: url(images/altapay.png) no-repeat 0 0;
+    height: 25px;
+    overflow: hidden;
+    width: auto;
+    background-size: 70px;
+    font-size: 0;
+    background-position: left 18px center
+}
+
+/*--SETTINGS--*/
+.altapay-selection {
+	border-collapse:collapse;
+	width:100%;
+}
+
+.altapay-selection th {
+	font-size:13px;
+	padding:5px 0;
+	text-align:left;
+	vertical-align:middle;
+}
+
+.altapay-selection .altapay-selection-info {
+	text-align:right;
+}
+
+.altapay-selection td {
+	background:none repeat scroll 0 0 #F2F2F2;
+	border-bottom:5px solid #FFF;
+	padding:5px;
+	vertical-align:top;
+}
+
+.altapay-selection .altapay-selection-info {
+	text-align:right;
+}

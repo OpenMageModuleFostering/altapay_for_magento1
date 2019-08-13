@@ -1,0 +1,43 @@
+<?php echo $this->getMessagesBlock()->toHtml() ?>
+<?php $_tokens = $this->getTokens(); ?>
+<div class="page-title">
+    <h1><?php echo $this->__('Credit Cards') ?></h1>
+</div>
+<?php echo $this->getPagerHtml(); ?>
+<?php if($_tokens && $_tokens->getSize()): ?>
+<table class="data-table" id="my-tokens-table">
+    <col width="1" />
+    <col width="1" />
+    <col />
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <thead>
+        <tr>
+            <th><?php echo $this->__('Card') ?></th>
+            <th><?php echo $this->__('Name') ?></th>
+            <th></th>
+            <th><?php echo $this->__('Primary') ?></th>
+            <th><?php echo $this->__('Delete') ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $_odd = ''; ?>
+        <?php foreach ($_tokens as $_token): ?>
+        <tr>
+            <td><span class="token-card-type"><?php echo $_token->getCardType(); ?></span><span class="token-masked-pan"><?php echo $_token->getMaskedPan(); ?></span></td>
+            <td>
+	            <input class="token-custom-name" data-token-custom-name="<?php echo ($_token->getCustomName()) ? $_token->getCustomName() : $_token->getMaskedPan(); ?>" data-token-id="<?php echo $_token->getId(); ?>" onblur="Altapay.updateCustomName(this);" value="<?php echo ($_token->getCustomName()) ? $_token->getCustomName() : $_token->getMaskedPan(); ?>"/>
+	        </td>
+	        <td><span class="token-status" id="token-custom-name-status-<?php echo $_token->getId(); ?>"></span></td>
+            <td><span class="token-primay"><input type="radio" onchange="Altapay.updatePrimaryToken(this);" name="primary-token" value="<?php echo $_token->getId(); ?>"<?php if($_token->getPrimary()) : ?>checked="checked"<?php endif; ?> /></span></td>            
+            <td><button type="button" class="button token-delete" data-token-id="<?php echo $_token->getId(); ?>" onclick="Altapay.deleteToken(this);"><span><span><?php echo $this->__('Delete') ?></span></span></button></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<script type="text/javascript">decorateTable('my-tokens-table');</script>
+<?php echo $this->getPagerHtml(); ?>
+<?php else: ?>
+    <p><?php echo $this->__('You have no credit cards.'); ?></p>
+<?php endif ?>

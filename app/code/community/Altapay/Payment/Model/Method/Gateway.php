@@ -58,7 +58,7 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 		    'billing_country'=> $billingAddress->getData('country_id'),
 		    'billing_address'=> $billingAddress->getData('street'),
 		    'billing_city'=>$billingAddress->getData('city'),
-		    'billing_region'=>$billingAddress->getData('region'),
+		    'billing_region'=>$this->getStateCode($billingAddress->getData('region')),
 			'billing_firstname'=> $billingAddress->getData('firstname'),
 		    'billing_lastname'=> $billingAddress->getData('lastname'),
 		    'email'=>$billingAddress->getData('email'),
@@ -66,7 +66,7 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 		    'shipping_country'=> $shippingAddress->getData('country_id'),
 		    'shipping_address'=> $shippingAddress->getData('street'),
 		    'shipping_city'=>$shippingAddress->getData('city'),
-		    'shipping_region'=>$shippingAddress->getData('region'),
+		    'shipping_region'=>$this->getStateCode($billingAddress->getData('region')),
 			'shipping_firstname'=> $shippingAddress->getData('firstname'),
 		    'shipping_lastname'=> $shippingAddress->getData('lastname'),
 			'customer_phone'=> $billingAddress->getData('telephone'),
@@ -216,5 +216,298 @@ class Altapay_Payment_Model_Method_Gateway extends Altapay_Payment_Model_Method_
 	protected function getAltapayTerminal()
 	{
 		return Mage::getStoreConfig(Altapay_Payment_Model_Constants::CONF_PATH_GATEWAY_TERMINAL);
+	}
+
+	private function getStateCode($state){ //only focusing on US and Mexico states.
+		$stateCode = "";
+		switch(trim(strtolower($state))){
+			case "alabama":
+				$stateCode = "AL";
+			break;
+			case "alaska":
+				$stateCode = "AK";
+			break;
+			case "arizona":
+				$stateCode = "AZ";
+			break;
+			case "arkansas":
+				$stateCode = "AR";
+			break;
+			case "california":
+				$stateCode = "AR";
+			break;
+			case "colorado":
+				$stateCode = "CO";
+			break;
+			case "connecticut":
+				$stateCode = "CT";
+			break;
+			case "delaware":
+				$stateCode = "DE";
+			break;
+			case "districtofcolumbia":
+				$stateCode = "DC";
+			break;
+			case "florida":
+				$stateCode = "FL";
+			break;
+			case "georgia":
+				$stateCode = "GA";
+			break;
+			case "hawaii":
+				$stateCode = "HI";
+			break;
+			case "idaho":
+				$stateCode = "ID";
+			break;
+			case "illinois":
+				$stateCode = "IL";
+			break;
+			case "indiana":
+				$stateCode = "IN";
+			break;
+			case "iowa":
+				$stateCode = "IA";
+			break;
+			case "kansas":
+				$stateCode = "KS";
+			break;
+			case "kentucky":
+				$stateCode = "KY";
+			break;
+			case "louisiana":
+				$stateCode = "LA";
+			break;
+			case "maine":
+				$stateCode = "ME";
+			break;
+			case "maryland":
+				$stateCode = "MD";
+			break;
+			case "massachusetts":
+				$stateCode = "MA";
+			break;
+			case "michigan":
+				$stateCode = "MI";
+			break;
+			case "minnesota":
+				$stateCode = "MN";
+			break;
+			case "mississippi":
+				$stateCode = "MS";
+			break;
+			case "missouri":
+				$stateCode = "MO";
+			break;
+			case "montana":
+				$stateCode = "MT";
+			break;
+			case "nebraska":
+				$stateCode = "NE";
+			break;
+			case "nevada":
+				$stateCode = "NV";
+			break;
+			case "newhampshire":
+				$stateCode = "NH";
+			break;
+			case "newjersey":
+				$stateCode = "NJ";
+			break;
+			case "newmexico":
+				$stateCode = "NM";
+			break;
+			case "newyork":
+				$stateCode = "NY";
+			break;
+			case "northcarolina":
+				$stateCode = "NC";
+			break;
+			case "northdakota":
+				$stateCode = "ND";
+			break;
+			case "ohio":
+				$stateCode = "OH";
+			break;
+			case "oklahoma":
+				$stateCode = "OK";
+			break;
+			case "oregon":
+				$stateCode = "OR";
+			break;
+			case "pennsylvania":
+				$stateCode = "PA";
+			break;
+			case "puertorico":
+				$stateCode = "PR";
+			break;
+			case "rhodeisland":
+				$stateCode = "RI";
+			break;
+			case "southcarolina":
+				$stateCode = "SC";
+			break;
+			case "southdakota":
+				$stateCode = "SD";
+			break;
+			case "tennessee":
+				$stateCode = "TN";
+			break;
+			case "texas":
+				$stateCode = "TX";
+			break;
+			case "utah":
+				$stateCode = "UT";
+			break;
+			case "vermont":
+				$stateCode = "VT";
+			break;
+			case "virginia":
+				$stateCode = "VA";
+			break;
+			case "washington":
+				$stateCode = "WA";
+			break;
+			case "westvirginia":
+				$stateCode = "WV";
+			break;
+			case "wisconsin":
+				$stateCode = "WI";
+			break;
+			case "wyoming":
+				$stateCode = "WY";
+			break;
+			case "armedforcesamericas":
+				$stateCode = "AA";
+			break;
+			case "armedforceseurope":
+				$stateCode = "AE";
+			break;
+			case "asrmedforcespacific":
+				$stateCode = "AP";
+			break;
+			case "americansamoa":
+				$stateCode = "AS";
+			break;
+			case "federatedstatesofmicronesia":
+				$stateCode = "FM";
+			break;
+			case "guam":
+				$stateCode = "GU";
+			break;
+			case "marshallislands":
+				$stateCode = "MH";
+			break;
+			case "northernmarianaislands":
+				$stateCode = "MP";
+			break;
+			case "palau":
+				$stateCode = "PW";
+			break;
+			case "virginislands":
+				$stateCode = "VI";
+			break;
+			//==========================================================================================================
+			case "aguascalientes":
+				$stateCode = "AGS";
+			break;
+			case "bajacalifornia":
+				$stateCode = "BC";
+			break;
+			case "bajacaliforniasur":
+				$stateCode = "BCS";
+			break;
+			case "campeche":
+				$stateCode = "CAMP";
+			break;
+			case "chiapas":
+				$stateCode = "CHIS";
+			break;
+			case "chihuahua":
+				$stateCode = "CHIH";
+			break;
+			case "coahuila":
+				$stateCode = "COAH";
+			break;
+			case "colima":
+				$stateCode = "COL";
+			break;
+			case "distritofederal":
+				$stateCode = "DF";
+			break;
+			case "durango":
+				$stateCode = "DGO";
+			break;
+			case "estadodeméxico":
+				$stateCode = "MEX";
+			break;
+			case "guanajuato":
+				$stateCode = "GTO";
+			break;
+			case "guerrero":
+				$stateCode = "GRO";
+			break;
+			case "hidalgo":
+				$stateCode = "HGO";
+			break;
+			case "jalisco":
+				$stateCode = "JAL";
+			break;
+			case "michoacán":
+				$stateCode = "MICH";
+			break;
+			case "morelos":
+				$stateCode = "MOR";
+			break;
+			case "nayarit":
+				$stateCode = "NAY";
+			break;
+			case "nuevoleón":
+				$stateCode = "NL";
+			break;
+			case "oaxaca":
+				$stateCode = "OAX";
+			break;
+			case "puebla":
+				$stateCode = "PUE";
+			break;
+			case "querétaro":
+				$stateCode = "QRO";
+			break;
+			case "quintanaroo":
+				$stateCode = "Q ROO";
+			break;
+			case "sanluispotosí":
+				$stateCode = "SLP";
+			break;
+			case "sinaloa":
+				$stateCode = "SIN";
+			break;
+			case "sonora":
+				$stateCode = "SON";
+			break;
+			case "tabasco":
+				$stateCode = "TAB";
+			break;
+			case "tamaulipas":
+				$stateCode = "TAMPS";
+			break;
+			case "tlaxcala":
+				$stateCode = "TLAX";
+			break;
+			case "veracruz":
+				$stateCode = "VER";
+			break;
+			case "yucatán":
+				$stateCode = "YUC";
+			break;
+			case "zacatecas":
+				$stateCode = "ZAC";
+			break;
+			default:
+				$stateCode = $state;
+		}
+
+		return $stateCode;
 	}
 }

@@ -296,8 +296,10 @@ class Altapay_Payment_OnepageController extends Mage_Checkout_OnepageController 
 		$checkoutSessionId = $this->getOnepage()->getCheckout()->getSessionId();
 		
 		try{
-			// Clear the basket and save the order (including some info about how the payment went)
+
 			$this->getOnepage()->getQuote()->collectTotals();
+			// Clear the basket and save the order (including some info about how the payment went)
+			$this->getOnepage()->getQuote()->setTotalsCollectedFlag(false)->collectTotals();
 			$this->getOnepage()->getQuote()->getPayment()->setAdditionalInformation('successType', $successType);
 			$orderId = $this->getOnepage()->saveOrder()->getLastOrderId();
 			$this->getOnepage()->getQuote()->save();
